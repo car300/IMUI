@@ -4,14 +4,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.gengqiquan.imui.R
+import com.gengqiquan.imui.model.emoji.EmojiManager
 import com.gengqiquan.imui.interfaces.IimMsg
 import com.gengqiquan.imui.model.MenuAction
 import org.jetbrains.anko.*
@@ -41,7 +38,7 @@ class ImTextView(context: Context) : RealImView(context) {
 
 
     override fun decoratorItemView(item: IimMsg) {
-        tv_content?.text = item.text()
+        tv_content?.text = EmojiManager.compatEmojiText(item.text())
         tv_content?.layoutParams = RelativeLayout.LayoutParams(wrapContent, wrapContent).apply {
             if (item.isSelf()) alignParentRight() else alignParentLeft()
         }

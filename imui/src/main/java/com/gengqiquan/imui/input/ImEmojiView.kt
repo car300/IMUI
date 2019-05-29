@@ -20,7 +20,7 @@ import com.gengqiquan.imui.model.Emoji
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
 
-
+@Deprecated(message = "使用字符Emoji会有平台不统一无法展示的问题", replaceWith = ReplaceWith("ImEmojiIconView"))
 class ImEmojiView(context: Context) : LinearLayout(context) {
     class Holder(textView: TextView) : RecyclerView.ViewHolder(textView)
 

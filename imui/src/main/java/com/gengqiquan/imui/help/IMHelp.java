@@ -1,7 +1,10 @@
 package com.gengqiquan.imui.help;
 
 import android.content.Context;
+
 import androidx.annotation.Nullable;
+
+import com.gengqiquan.imui.model.emoji.EmojiManager;
 import com.gengqiquan.imui.interfaces.*;
 import com.gengqiquan.imui.ui.DefaultIMViewFactory;
 
@@ -35,7 +38,8 @@ public class IMHelp {
         msgSenderMap.remove(context);
     }
 
-    public static @Nullable IMsgSender getMsgSender(Context context) {
+    public static @Nullable
+    IMsgSender getMsgSender(Context context) {
         return msgSenderMap.get(context);
     }
 
@@ -97,6 +101,7 @@ public class IMHelp {
                     msgBuildPolicy = buildPolicy;
                     audioRecord = recorder;
                     imageDisplayer = displayer;
+                    EmojiManager.init(context);
                 }
             }
         }

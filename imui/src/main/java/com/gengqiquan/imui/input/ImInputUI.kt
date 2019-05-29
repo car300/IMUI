@@ -57,7 +57,7 @@ class ImInputUI(context: Context) : LinearLayout(context) {
     private var iv_other: ImageView? = null
     private var iv_audio: ImageView? = null
     private var gv_button: View? = null
-    private var im_emoji = ImEmojiView(context).apply {
+    private var im_emoji = ImEmojiIconView(context).apply {
         visibility = View.GONE
     }
     private var inAudio = false
