@@ -49,4 +49,5 @@ dependencies {
         exclude group: 'androidx.appcompat', module: 'appcompat'
     }
     implementation project(path: ':IMLib')
+    implementation 'com.che300:QQPermission:0.0.12'
 }

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
@@ -53,11 +53,11 @@ dependencies {
 
 }
 
-/*publish {
+publish {
     userOrg = 'adrianzuo'//bintray.com用户名
     groupId = 'com.adrianzuo'//jcenter上的路径
     artifactId = 'IMLib'//项目名称
-    publishVersion = '0.0.2'//版本号
+    publishVersion = '0.0.3'//版本号
     desc = ''//描述，不重要
     website = 'https://github.com/gengqiquan/IMUI'
-}*/
+}

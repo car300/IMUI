@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.core.widget.doOnTextChanged
 import com.gengqiquan.imui.R
 import com.gengqiquan.imui.help.IMHelp
+import com.gengqiquan.imui.interfaces.IAudioListener
 import com.gengqiquan.imui.interfaces.ISelectListener
 import com.gengqiquan.imui.interfaces.OtherProxy
 import com.gengqiquan.imui.model.ButtonInfo
@@ -49,6 +50,10 @@ class ImInputUI(context: Context) : LinearLayout(context) {
     fun otherProxy(proxy: OtherProxy) {
         otherProxy = proxy
     }
+    private var audioClick:IAudioListener ?= null
+    fun audioListener(audio:IAudioListener){
+        audioClick = audio
+    }
 
     private var data: MutableList<ButtonInfo> = arrayListOf()
     private var tv_send: TextView? = null
@@ -76,8 +81,10 @@ class ImInputUI(context: Context) : LinearLayout(context) {
             }
             iv_audio = imageView {
                 onClick {
-                    audioState()
-                    im_emoji?.gone()
+                    audioClick?.audioClick {
+                        audioState()
+                        im_emoji?.gone()
+                    }
                 }
                 background = resources.getDrawable(R.drawable.im_voice)
             }.lparams(dip(26), dip(26)) {

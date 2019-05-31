@@ -1,5 +1,6 @@
 package com.gengqiquan.demo
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
@@ -28,18 +29,37 @@ import com.gengqiquan.imlib.video.listener.MediaCallBack
 import com.gengqiquan.imui.help.ToastHelp
 import com.gengqiquan.imui.interfaces.*
 import com.gengqiquan.imui.model.MenuAction
+import com.gengqiquan.permission.QQPermission
 import com.gengqiquan.qqresult.QQResult
 import com.tencent.imsdk.TIMMessage
 import com.tencent.imsdk.ext.message.TIMConversationExt
 import com.tencent.imsdk.ext.message.TIMMessageExt
 import com.tencent.imsdk.ext.message.TIMUserConfigMsgExt
 import com.xhe.photoalbum.PhotoAlbum
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        val command = arrayOf("chmod", "777", cacheDir.absolutePath)
+        var builder = ProcessBuilder(*command)
+        try {
+            builder.start()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        val command2 = arrayOf("chmod", "777", cacheDir.toString())
+        builder = ProcessBuilder(*command2)
+        try {
+            builder.start()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
 
 //        val list = arrayListOf<RealMsg>()
 //        list.add(RealMsg(TXMsg("你好", "", TXMsg.Type.TEXT), true))
@@ -254,37 +274,47 @@ class MainActivity : AppCompatActivity() {
         im_ui.inputUI.otherProxy(object : OtherProxy {
             override fun proxy(type: Int, send: (Any) -> Unit) {
                 if (type == ButtonFactory.PICTURE) {
-                    QQResult.startActivityWith(
-                        this@MainActivity,
-                        PhotoAlbum(this@MainActivity).setLimitCount(4).albumIntent
-                    )
-                        .result {
-                            IMHelp.getMsgBuildPolicy()
-                                .buildImgMessageList(PhotoAlbum.parseResult(it))
-                                .forEach(send)
-                        }
+                    QQPermission.with(this@MainActivity, Manifest.permission.READ_EXTERNAL_STORAGE
+                            , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            .silence()
+                            .requestPermissions {
+                                QQResult.startActivityWith(
+                                        this@MainActivity,
+                                        PhotoAlbum(this@MainActivity).setLimitCount(4).albumIntent
+                                )
+                                        .result {
+                                            IMHelp.getMsgBuildPolicy()
+                                                    .buildImgMessageList(PhotoAlbum.parseResult(it))
+                                                    .forEach(send)
+                                        }
+                            }
                     return
                 }
                 if (type == ButtonFactory.CAMERA) {
-                    val captureIntent = Intent(this@MainActivity, CameraActivity::class.java)
-                    CameraActivity.mCallBack = object : MediaCallBack {
-                        override fun onImageSuccess(path: String) {
-                            send(IMHelp.getMsgBuildPolicy().buildImgMessage(path))
-                        }
+                    QQPermission.with(this@MainActivity, Manifest.permission.CAMERA
+                            , Manifest.permission.RECORD_AUDIO)
+                            .silence()
+                            .requestPermissions {
+                                val captureIntent = Intent(this@MainActivity, CameraActivity::class.java)
+                                CameraActivity.mCallBack = object : MediaCallBack {
+                                    override fun onImageSuccess(path: String) {
+                                        send(IMHelp.getMsgBuildPolicy().buildImgMessage(path))
+                                    }
 
-                        override fun onVideoSuccess(videoData: Intent) {
-                            val imgPath = videoData.getStringExtra("image_path")
-                            val videoPath = videoData.getStringExtra("video_path")
-                            val imgWidth = videoData.getIntExtra("width", 0)
-                            val imgHeight = videoData.getIntExtra("height", 0)
-                            val duration = videoData.getLongExtra("duration", 0)
-                            val msg =
-                                IMHelp.getMsgBuildPolicy()
-                                    .buildVideoMessage(imgPath, videoPath, imgWidth, imgHeight, duration)
-                            send(msg)
-                        }
-                    }
-                    startActivity(captureIntent)
+                                    override fun onVideoSuccess(videoData: Intent) {
+                                        val imgPath = videoData.getStringExtra("image_path")
+                                        val videoPath = videoData.getStringExtra("video_path")
+                                        val imgWidth = videoData.getIntExtra("width", 0)
+                                        val imgHeight = videoData.getIntExtra("height", 0)
+                                        val duration = videoData.getLongExtra("duration", 0)
+                                        val msg =
+                                                IMHelp.getMsgBuildPolicy()
+                                                        .buildVideoMessage(imgPath, videoPath, imgWidth, imgHeight, duration)
+                                        send(msg)
+                                    }
+                                }
+                                startActivity(captureIntent)
+                            }
                     return
                 }
                 if (type == ButtonFactory.CAR) {
@@ -304,9 +334,17 @@ class MainActivity : AppCompatActivity() {
                     im_ui.newMsgs(RealMsg.create(TIMMsgBuilder.buildPreCustomMessage(JsonUtil.toJson(ele))))
                     return
                 }
-
             }
 
+        })
+        im_ui.inputUI.audioListener(object :IAudioListener{
+            override fun audioClick(f: () -> Unit) {
+                QQPermission.with(this@MainActivity, Manifest.permission.RECORD_AUDIO)
+                        .silence()
+                        .requestPermissions {
+                            f()
+                        }
+            }
         })
         var list = mutableListOf<MenuAction>()
         list.add(MenuAction("撤回", {
@@ -366,6 +404,5 @@ class MainActivity : AppCompatActivity() {
     val tag = "immmmmm"
     val tel = "129a14e8a4b3a123"
     val indent = "8849cc559d324811"
-    val sig =
-        "eJxlj81qg0AYRfc*hbi1lHH0M2MhCw0x2KYpRQ3FjcjMqNNY488oltJ3L7UNsfRuz*Fe7oeiqqoW7cPbjNLzUMtUvjdcU*9UDWk3V9g0gqWZTM2O-YN8akTH0yyXvJuhAQAYoaUjGK*lyMWvQYjlUArgMBNbxDAWZs9O6Tz3U2UhhBEg*KOIYoaP2*dN4E*hlwewFyj0rVYfS-5Qea1*2AR2krlH27N3q4q5OzyBK7xRH2IZl1ExbF-a5ET9Y-FqHe7jpy7We70CzyRR2fpFmBTr9WJSijd**WYDdkyyWtCRd70417OAkQEGNtF3NOVT*QKew13t"
+    val sig = "eJxlj8FOg0AURfd8BWFbYx8Dr4BJFwQqYlubVrTuCJmZ1oFCYRixavx3I2rEeLfn5N7cN03XdSNZ3J5nlB6fKpWql5ob*oVugHH2C*tasDRTqSXZP8hPtZA8zXaKyx6aiEgAho5gvFJiJ74N17U9ShE9ZhHbNc2B2bIi7ee*qmwAAgj4RxH7Hi5n6yCOHqNmfGhCENvlZp6wURzchZe5HZ1urLJwMuq59QzC632Q*MIP*f3qtelUTmKFDwtn4rvVerVpRyWd5EUxp2x7kFdy3OHzdDqYVKLkP988Ao5n4YB2XLbiWPUCARNNYsFnDO1d*wDI4V5d"
 }
