@@ -5,6 +5,8 @@ import android.media.MediaRecorder;
 import com.gengqiquan.imui.help.IMHelp;
 import com.gengqiquan.imui.help.ToastHelp;
 
+import java.io.File;
+
 /**
  * Created by valexhuang on 2018/5/29.
  */
@@ -72,7 +74,6 @@ public class UIKitAudioArmMachine {
 
     }
 
-
     public void stopPlayRecord() {
         if (mPlayer != null) {
             mPlayer.stop();
@@ -113,7 +114,7 @@ public class UIKitAudioArmMachine {
                 mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 //RAW_AMR虽然被高版本废弃，但它兼容低版本还是可以用的
                 mRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
-                recordAudioPath = CURRENT_RECORD_FILE + System.currentTimeMillis();
+                recordAudioPath = CURRENT_RECORD_FILE + File.separator + System.currentTimeMillis();
                 mRecorder.setOutputFile(recordAudioPath);
                 mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
                 startTime = System.currentTimeMillis();

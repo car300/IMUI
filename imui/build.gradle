@@ -45,7 +45,7 @@ publish {
     userOrg = 'adrianzuo'//bintray.com用户名
     groupId = 'com.adrianzuo'//jcenter上的路径
     artifactId = 'IMUI'//项目名称
-    publishVersion = '0.0.3'//版本号
+    publishVersion = '0.0.5'//版本号
     desc = ''//描述，不重要
     website = 'https://github.com/gengqiquan/IMUI'
 }

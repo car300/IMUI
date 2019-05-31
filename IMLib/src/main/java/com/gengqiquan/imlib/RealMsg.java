@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import androidx.annotation.MainThread;
 import com.gengqiquan.imlib.model.CustomElem;
+import com.gengqiquan.imui.help.IMHelp;
+import com.gengqiquan.imui.interfaces.IPathListener;
 import com.gengqiquan.imui.interfaces.IimMsg;
 import com.gengqiquan.imui.model.ImImage;
 import com.gengqiquan.imui.model.ImVideo;
@@ -107,11 +109,31 @@ public class RealMsg implements IimMsg {
 
     @NotNull
     @Override
-    public String sound() {
+    public void sound(@NotNull final IPathListener listener) {
         if (elem.getType() != TIMElemType.Sound) {
             throw new IllegalArgumentException("can not call img() that is not of the type: sound");
         }
-        return ((TIMSoundElem) elem).getPath();
+        String path = ((TIMSoundElem) elem).getPath();
+
+        if (!path.isEmpty()){
+            listener.path(path);
+            return;
+        }
+        final String savePath = IMHelp.getAudioPath()+((TIMSoundElem) elem).getUuid();
+        ((TIMSoundElem) elem).getSoundToFile(savePath, null, new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+                listener.path("");
+            }
+
+            @Override
+            public void onSuccess() {
+                IMHelp.getMsgBuildPolicy().buildAudioMessage(
+                        savePath,
+                        (int) ((TIMSoundElem) elem).getDuration());
+                listener.path(savePath);
+            }
+        });
     }
 
     @Override

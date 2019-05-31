@@ -23,7 +23,7 @@ open interface IimMsg {
     fun text(): String
     fun time(): String?
     fun video(): ImVideo
-    fun sound(): String
+    fun sound(listener:IPathListener): Unit
     fun img(): ImImage
     fun isSelf(): Boolean
     fun duration(): Long

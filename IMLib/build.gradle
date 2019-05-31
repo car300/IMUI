@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+//apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
@@ -39,7 +40,6 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
     implementation "org.jetbrains.anko:anko-recyclerview-v7-coroutines:$anko_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'com.github.bumptech.glide:glide:3.8.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     api 'com.tencent.imsdk:imsdk:4.3.81'
@@ -52,3 +52,12 @@ dependencies {
     api project(path: ':imui')
 
 }
+
+/*publish {
+    userOrg = 'adrianzuo'//bintray.com用户名
+    groupId = 'com.adrianzuo'//jcenter上的路径
+    artifactId = 'IMLib'//项目名称
+    publishVersion = '0.0.2'//版本号
+    desc = ''//描述，不重要
+    website = 'https://github.com/gengqiquan/IMUI'
+}*/
