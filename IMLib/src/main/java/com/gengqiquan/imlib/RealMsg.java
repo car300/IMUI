@@ -244,7 +244,15 @@ public class RealMsg implements IimMsg {
     @NotNull
     @Override
     public String sender() {
-        return timMsg.getSenderProfile().getNickName();
+        return timMsg.getSenderProfile(new TIMValueCallBack<TIMUserProfile>() {
+            @Override
+            public void onError(int i, String s) {
+            }
+
+            @Override
+            public void onSuccess(TIMUserProfile timUserProfile) {
+            }
+        }).getNickName();
     }
 
     CustomElem customData;
