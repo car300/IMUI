@@ -86,14 +86,14 @@ class MainActivity : AppCompatActivity() {
 //        list.add(RealMsg(TXMsg("", "", TXMsg.Type.VIDEO), true))
 //        list.add(RealMsg(TXMsg("", "", TXMsg.Type.VIDEO), false))
         IMHelp.init(this, TIMAudioRecorder(), TIMMsgBuilder(), object : ImImageDisplayer {
-            override fun display(url: String, imageView: ImageView, listener: DisplayListener?) {
+            override fun display(url: String, imageView: ImageView, displayListener: DisplayListener?) {
                 Glide.with(imageView.context)
                     .load(url)
                     .asBitmap()
                     .into(object : SimpleTarget<Bitmap>() {
                         override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
                             imageView.setImageBitmap(resource)
-                            listener?.ready()
+                            displayListener?.ready()
                         }
                     })
             }
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         TIMManager.getInstance().init(
             applicationContext, TIMSdkConfig(1400205051)
                 .enableLogPrint(true)
-                .enableCrashReport(false)
+//                .enableCrashReport(false)
                 .enableLogPrint(true)
                 .setLogLevel(TIMLogLevel.DEBUG)
                 .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest/")
@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun loadMore(init: Boolean = false) {
-            getMessage(mutableListOf(), {
+            getMessage(mutableListOf()) {
                 if (it.isNotEmpty()) {
                     if (it.size < count) {
                         im_ui.allInit()
@@ -217,8 +217,10 @@ class MainActivity : AppCompatActivity() {
                     }
                     list.reverse()
                     im_ui.oldMsgs(list, init)
+                }else{
+                    im_ui.allInit()
                 }
-            })
+            }
 //            conversationExt.getMessage(count, lastMsg, object : TIMValueCallBack<List<TIMMessage>> {
 //                override fun onSuccess(msgs: List<TIMMessage>) {
 //                    Log.e(tag, "获取漫游消息" + msgs.size.toString())
@@ -377,28 +379,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     val json = "{\n" +
-            "    \"data\": {\n" +
-            "        \"action_type\": 1,\n" +
-            "        \"msg\": {\n" +
-            "            \"content\": \"公司：南京市大锤二手车经营管理中心\",\n" +
-            "            \"module\": \"模块来源\",\n" +
-            "            \"pic_url\": \"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1336029781,3333225635&fm=26&gp=0.jpg\",\n" +
-            "            \"title\": \"2013款 朗逸 改款 1.4TFSI 手动豪华版 5周年纪念款\"\n" +
-            "        },\n" +
-            "        \"router_url\": \"che300://open/webv/http://m.che300.com\",\n" +
-            "        \"style\": 0\n" +
+            "    \"type\":\"share\",\n" +
+            "    \"type_desc\":\"个人名片\",\n" +
+            "    \"platform\":{\n" +
+            "        \"from\":\"che300_pro\",\n" +
+            "        \"os\":\"android\",\n" +
+            "        \"version\":\"2.2.4.0\",\n" +
+            "        \"device_info\":\"(OPPO A83,Android 7.1.1)\",\n" +
+            "        \"sender_user_id\":\"fjjkwerwiuafsjfkjf\",\n" +
+            "        \"receive_user_id\":\"wtwouafjklfaksjf\",\n" +
+            "        \"latitude\":\"\",\n" +
+            "        \"longitude\":\"\"\n" +
             "    },\n" +
-            "    \"platform\": {\n" +
-            "        \"device_info\": \"(OPPO A83,Android 7.1.1)\",\n" +
-            "        \"from\": \"che300_pro\",\n" +
-            "        \"from_user_id\": \"fjjkwerwiuafsjfkjf\",\n" +
-            "        \"lat\": \"\",\n" +
-            "        \"lng\": \"\",\n" +
-            "        \"os\": \"ios\",\n" +
-            "        \"receive_user_id\": \"wtwouafjklfaksjf\",\n" +
-            "        \"version\": \"2.2.4.0\"\n" +
-            "    },\n" +
-            "    \"type\": \"share\"\n" +
+            "    \"data\":{\n" +
+            "        \"router_url\":\"che300://open/webv/http://m.che300.com\",\n" +
+            "        \"action_type\":\"1\",\n" +
+            "        \"style\":0,\n" +
+            "        \"msg\":{\n" +
+            "            \"title\":\"2013款 朗逸 改款 1.4TFSI 手动豪华版 5周年纪念款\",\n" +
+            "            \"content\":\"公司：南京市大锤二手车经营管理中心\",\n" +
+            "            \"module\":\"模块来源\",\n" +
+            "            \"pic_url\":\"http://img.wxcha.com/file/201603/07/7ec4c7c1f7.jpg\"\n" +
+            "        }\n" +
+            "    }\n" +
             "}"
     var lastMsg: TIMMessage? = null
     val tag = "immmmmm"

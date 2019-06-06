@@ -6,20 +6,20 @@ public class Platform {
     private String os;
     private String version;
     private String device_info;
-    private String from_user_id;
+    private String sender_user_id;
     private String receive_user_id;
-    private String lat;
-    private String lng;
+    private String latitude;
+    private String longitude;
 
-    public Platform(String from, String os, String version, String device_info, String from_user_id, String receive_user_id, String lat, String lng) {
+    public Platform(String from, String os, String version, String device_info, String sender_user_id, String receive_user_id, String latitude, String longitude) {
         this.from = from;
         this.os = os;
         this.version = version;
         this.device_info = device_info;
-        this.from_user_id = from_user_id;
+        this.sender_user_id = sender_user_id;
         this.receive_user_id = receive_user_id;
-        this.lat = lat;
-        this.lng = lng;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getFrom() {
@@ -54,13 +54,6 @@ public class Platform {
         this.device_info = device_info;
     }
 
-    public String getFrom_user_id() {
-        return from_user_id;
-    }
-
-    public void setFrom_user_id(String from_user_id) {
-        this.from_user_id = from_user_id;
-    }
 
     public String getReceive_user_id() {
         return receive_user_id;
@@ -70,20 +63,28 @@ public class Platform {
         this.receive_user_id = receive_user_id;
     }
 
-    public String getLat() {
-        return lat;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setLat(String lat) {
-        this.lat = lat;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public String getLng() {
-        return lng;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLng(String lng) {
-        this.lng = lng;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getSender_user_id() {
+        return sender_user_id;
+    }
+
+    public void setSender_user_id(String sender_user_id) {
+        this.sender_user_id = sender_user_id;
     }
 
     @Override
@@ -93,10 +94,10 @@ public class Platform {
                 ", os='" + os + '\'' +
                 ", version='" + version + '\'' +
                 ", device_info='" + device_info + '\'' +
-                ", from_user_id='" + from_user_id + '\'' +
+                ", sender_user_id='" + sender_user_id + '\'' +
                 ", receive_user_id='" + receive_user_id + '\'' +
-                ", lat='" + lat + '\'' +
-                ", lng='" + lng + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
                 '}';
     }
 }

@@ -244,7 +244,7 @@ public class RealMsg implements IimMsg {
     @NotNull
     @Override
     public String sender() {
-        return timMsg.getSenderProfile(new TIMValueCallBack<TIMUserProfile>() {
+        return timMsg.getSenderProfile(/*new TIMValueCallBack<TIMUserProfile>() {
             @Override
             public void onError(int i, String s) {
             }
@@ -252,7 +252,7 @@ public class RealMsg implements IimMsg {
             @Override
             public void onSuccess(TIMUserProfile timUserProfile) {
             }
-        }).getNickName();
+        }*/).getNickName();
     }
 
     CustomElem customData;

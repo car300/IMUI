@@ -8,6 +8,7 @@ public class CustomElem {
     private CustomType type = CustomType.invalid;
     private Platform platform;
     private Object data;
+    private String type_desc;
 
     public CustomElem(CustomType type, Platform platform, Object data) {
         this.type = type;
@@ -39,6 +40,14 @@ public class CustomElem {
         this.data = data;
     }
 
+    public String getType_desc() {
+        return type_desc;
+    }
+
+    public void setType_desc(String type_desc) {
+        this.type_desc = type_desc;
+    }
+
     public static CustomElem create(String json) {
 
         CustomElem customElem = (CustomElem) JsonUtil.fromJson(json, CustomElem.class);
@@ -58,9 +67,10 @@ public class CustomElem {
     @Override
     public String toString() {
         return "CustomElem{" +
-                "type='" + type + '\'' +
-                ", platform=" + platform.toString() +
-                ", data=" + data.toString() +
+                "type=" + type +
+                ", platform=" + platform +
+                ", data=" + data +
+                ", type_desc='" + type_desc + '\'' +
                 '}';
     }
 }
