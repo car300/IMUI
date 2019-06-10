@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity() {
             applicationContext, TIMSdkConfig(1400205051)
                 .enableLogPrint(true)
 //                .enableCrashReport(false)
-                .enableLogPrint(true)
                 .setLogLevel(TIMLogLevel.DEBUG)
                 .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest/")
         )
@@ -128,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onDisconnected(p0: Int, p1: String?) {
                 }
             })
-            .setGroupEventListener { }
+                .setGroupEventListener { }
         userConfig.refreshListener = object : TIMRefreshListener {
             override fun onRefreshConversation(msgs: MutableList<TIMConversation>) {
 
