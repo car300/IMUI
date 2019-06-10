@@ -82,7 +82,7 @@ class ImPreSendView(val context: Context) : ImView {
                 tv_desc?.text = data.msg.content
                 IMHelp.getImageDisplayer().display(data.msg.pic_url, iv_img!!)
                 tv_send?.singleClick {
-//                    TIMMessageExt(item.realData()).customInt = 0
+                    TIMMessageExt(item.realData()).customInt = 0
                     IMHelp.getMsgSender(context)?.send(item.realData())
                 }
             }
