@@ -249,6 +249,11 @@ class MainActivity : AppCompatActivity() {
                     newMsg.copyFrom(timMessage)
                     timMessage = newMsg
                 }
+                if (TIMMessageExt(timMessage).customInt == -1){
+                    im_ui.delete(RealMsg.decorate(timMessage))
+                    TIMMessageExt(timMessage).customInt = 0
+                }
+
                 val realMsg = RealMsg.create(timMessage)
                 im_ui.newMsgs(realMsg)
                 senderListener?.sending()
