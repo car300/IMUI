@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import androidx.annotation.MainThread;
 import com.gengqiquan.imlib.model.CustomElem;
+import com.gengqiquan.imlib.model.TIMCustomMsg;
 import com.gengqiquan.imui.help.IMHelp;
 import com.gengqiquan.imui.interfaces.IPathListener;
 import com.gengqiquan.imui.interfaces.IimMsg;
@@ -202,7 +203,7 @@ public class RealMsg implements IimMsg {
             return -1;
         }
         if (elem.getType() == TIMElemType.Custom) {
-            TIMCustomElem customElem = (TIMCustomElem) elem;
+            TIMCustomMsg customElem = (TIMCustomMsg) elem;
             customData = CustomElem.create(new String(customElem.getData()));
             int type = 0;
             switch (customData.getType()) {
@@ -210,7 +211,7 @@ public class RealMsg implements IimMsg {
                     type = 5;
                     break;
             }
-            if (new TIMMessageExt(timMsg).getCustomInt() == -1) {
+            if (customElem.getStatus() == TIMCustomMsg.Status.preSend) {
                 type = 1000 + type;
             }
             return type;
