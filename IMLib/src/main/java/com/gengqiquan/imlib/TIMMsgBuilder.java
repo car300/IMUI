@@ -62,14 +62,14 @@ public class TIMMsgBuilder implements IMsgBuildPolicy {
         return TimMsg;
     }
 
-    public static TIMMessage buildPreCustomMessage(String json) {
+    /*public static TIMMessage buildPreCustomMessage(String json) {
         TIMMessage TimMsg = new TIMMessage();
         TIMCustomElem ele = new TIMCustomElem();
         ele.setData(json.getBytes());
         TimMsg.addElement(ele);
         new TIMMessageExt(TimMsg).setCustomInt(-1);
         return TimMsg;
-    }
+    }*/
 
     @Override
     public TIMMessage buildVideoMessage(String imgPath, String videoPath, int width, int height, long duration) {

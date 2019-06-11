@@ -4,11 +4,10 @@ import com.gengqiquan.imlib.uitls.JsonUtil;
 
 public class CustomElem {
 
-
-    private CustomType type = CustomType.invalid;
-    private Platform platform;
-    private Object data;
-    private String type_desc;
+    protected CustomType type = CustomType.invalid;
+    protected Platform platform;
+    protected Object data;
+    protected String type_desc;
 
     public CustomElem(CustomType type, Platform platform, Object data) {
         this.type = type;

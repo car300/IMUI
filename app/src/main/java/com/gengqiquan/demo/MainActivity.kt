@@ -24,6 +24,7 @@ import com.gengqiquan.imlib.TIMViewFactory
 import com.gengqiquan.imlib.audio.TIMAudioRecorder
 import com.gengqiquan.imlib.TIMMsgBuilder
 import com.gengqiquan.imlib.model.CustomElem
+import com.gengqiquan.imlib.model.PreCustomElem
 import com.gengqiquan.imlib.video.CameraActivity
 import com.gengqiquan.imlib.video.listener.MediaCallBack
 import com.gengqiquan.imui.help.ToastHelp
@@ -249,16 +250,23 @@ class MainActivity : AppCompatActivity() {
                     newMsg.copyFrom(timMessage)
                     timMessage = newMsg
                 }
-                if (TIMMessageExt(timMessage).customInt == -1){
-                    im_ui.delete(RealMsg.decorate(timMessage))
-                    TIMMessageExt(timMessage).customInt = 0
+                val elem = timMessage.getElement(0)
+                if (elem.type == TIMElemType.Custom) {
+                    val customElem = elem as TIMCustomElem
+                    val preCustomElem = PreCustomElem.create(String(customElem.data))
+                    if (preCustomElem.showType == PreCustomElem.ShowType.preSend){
+                        im_ui.delete(RealMsg.decorate(timMessage))
+//                        preCustomElem.showType = PreCustomElem.ShowType.normal
+                        val newCustomElem = CustomElem(preCustomElem.type,preCustomElem.platform,preCustomElem.data)
+                        timMessage = IMHelp.getMsgBuildPolicy().buildCustomMessage(JsonUtil.toJson(newCustomElem)) as TIMMessage
+                    }
                 }
 
                 val realMsg = RealMsg.create(timMessage)
                 im_ui.newMsgs(realMsg)
                 senderListener?.sending()
 //                im_ui.newMsgs(RealMsg.create(msg as TIMMessage))
-                con.sendMessage(msg, object : TIMValueCallBack<TIMMessage> {
+                con.sendMessage(timMessage, object : TIMValueCallBack<TIMMessage> {
                     override fun onSuccess(msg: TIMMessage) {
                         Log.e(tag, "onSuccess" + msg.toString())
                         senderListener?.success()
@@ -335,10 +343,11 @@ class MainActivity : AppCompatActivity() {
                     return
                 }
                 if (type == ButtonFactory.CARD) {
-                    val ele = CustomElem.create(json)
+                    val ele = PreCustomElem.create(json)
+                    ele.showType = PreCustomElem.ShowType.preSend
                     Log.d(tag, ele.toString())
                     Log.d(tag, JsonUtil.toJson(ele))
-                    im_ui.newMsgs(RealMsg.create(TIMMsgBuilder.buildPreCustomMessage(JsonUtil.toJson(ele))))
+                    im_ui.newMsgs(RealMsg.create(IMHelp.getMsgBuildPolicy().buildCustomMessage(JsonUtil.toJson(ele)) as TIMMessage))
                     return
                 }
             }
