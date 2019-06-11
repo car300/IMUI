@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import androidx.annotation.MainThread;
 import com.gengqiquan.imlib.model.CustomElem;
-import com.gengqiquan.imlib.model.TIMCustomMsg;
 import com.gengqiquan.imui.help.IMHelp;
 import com.gengqiquan.imui.interfaces.IPathListener;
 import com.gengqiquan.imui.interfaces.IimMsg;
@@ -203,7 +202,7 @@ public class RealMsg implements IimMsg {
             return -1;
         }
         if (elem.getType() == TIMElemType.Custom) {
-            TIMCustomMsg customElem = (TIMCustomMsg) elem;
+            TIMCustomElem customElem = (TIMCustomElem) elem;
             customData = CustomElem.create(new String(customElem.getData()));
             int type = 0;
             switch (customData.getType()) {
@@ -211,7 +210,7 @@ public class RealMsg implements IimMsg {
                     type = 5;
                     break;
             }
-            if (customElem.getStatus() == TIMCustomMsg.Status.preSend) {
+            if (new TIMMessageExt(timMsg).getCustomInt() == -1) {
                 type = 1000 + type;
             }
             return type;
@@ -245,7 +244,7 @@ public class RealMsg implements IimMsg {
     @NotNull
     @Override
     public String sender() {
-        return timMsg.getSenderProfile(new TIMValueCallBack<TIMUserProfile>() {
+        return timMsg.getSenderProfile(/*new TIMValueCallBack<TIMUserProfile>() {
             @Override
             public void onError(int i, String s) {
             }
@@ -253,7 +252,7 @@ public class RealMsg implements IimMsg {
             @Override
             public void onSuccess(TIMUserProfile timUserProfile) {
             }
-        }).getNickName();
+        }*/).getNickName();
     }
 
     CustomElem customData;
