@@ -9,10 +9,11 @@ public class CustomElem {
     protected Object data;
     protected String type_desc;
 
-    public CustomElem(CustomType type, Platform platform, Object data) {
+    public CustomElem(CustomType type, Platform platform, Object data,String type_desc) {
         this.type = type;
         this.platform = platform;
         this.data = data;
+        this.type_desc = type_desc;
     }
 
     public CustomType getType() {

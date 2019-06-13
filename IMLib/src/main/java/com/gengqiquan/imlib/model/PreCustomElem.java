@@ -37,8 +37,8 @@ public class PreCustomElem extends CustomElem {
         this.showType = showType;
     }
 
-    public PreCustomElem(ShowType showType,CustomType type, Platform platform, Object data) {
-        super(type, platform, data);
+    public PreCustomElem(CustomType type, Platform platform, Object data, String type_desc,ShowType showType) {
+        super(type, platform, data, type_desc);
         this.showType = showType;
     }
 

@@ -11,7 +11,7 @@ public interface IMsgBuildPolicy {
 
     Object buildImgMessage(String path);
 
-    Object buildCustomMessage(String json);
+    Object buildCustomMessage(String json,String desc);
 
     Object buildVideoMessage(String imgPath, String videoPath, int imgWidth, int imgHeight, long duration);
 }

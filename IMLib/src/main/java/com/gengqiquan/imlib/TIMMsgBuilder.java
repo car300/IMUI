@@ -54,11 +54,15 @@ public class TIMMsgBuilder implements IMsgBuildPolicy {
 
 
     @Override
-    public TIMMessage buildCustomMessage(String json) {
+    public TIMMessage buildCustomMessage(String json,String desc) {
         TIMMessage TimMsg = new TIMMessage();
         TIMCustomElem ele = new TIMCustomElem();
         ele.setData(json.getBytes());
         TimMsg.addElement(ele);
+        TIMMessageOfflinePushSettings settings = new TIMMessageOfflinePushSettings();
+        settings.setEnabled(true);
+        settings.setDescr(desc);
+        TimMsg.setOfflinePushSettings(settings);
         return TimMsg;
     }
 

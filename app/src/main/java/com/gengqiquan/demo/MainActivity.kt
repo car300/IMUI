@@ -89,20 +89,20 @@ class MainActivity : AppCompatActivity() {
         IMHelp.init(this, TIMAudioRecorder(), TIMMsgBuilder(), object : ImImageDisplayer {
             override fun display(url: String, imageView: ImageView, displayListener: DisplayListener?) {
                 Glide.with(imageView.context)
-                    .load(url)
-                    .asBitmap()
-                    .into(object : SimpleTarget<Bitmap>() {
-                        override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
-                            imageView.setImageBitmap(resource)
-                            displayListener?.ready()
-                        }
-                    })
+                        .load(url)
+                        .asBitmap()
+                        .into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                                imageView.setImageBitmap(resource)
+                                displayListener?.ready()
+                            }
+                        })
             }
         })
         IMHelp.addImViewFactory(TIMViewFactory())
 //        im_ui.appendMsgs(list.toMutableList())
         TIMManager.getInstance().init(
-            applicationContext, TIMSdkConfig(1400205051)
+                applicationContext, TIMSdkConfig(1400205051)
                 .enableLogPrint(true)
 //                .enableCrashReport(false)
                 .enableLogPrint(true)
@@ -110,26 +110,26 @@ class MainActivity : AppCompatActivity() {
                 .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest/")
         )
         val userConfig = TIMUserConfig().setGroupEventListener { }
-            .setUserStatusListener(object : TIMUserStatusListener {
-                override fun onUserSigExpired() {
+                .setUserStatusListener(object : TIMUserStatusListener {
+                    override fun onUserSigExpired() {
 
-                }
+                    }
 
-                override fun onForceOffline() {
-                }
-            })
-            .setConnectionListener(object : TIMConnListener {
-                override fun onConnected() {
+                    override fun onForceOffline() {
+                    }
+                })
+                .setConnectionListener(object : TIMConnListener {
+                    override fun onConnected() {
 
-                }
+                    }
 
-                override fun onWifiNeedAuth(p0: String?) {
-                }
+                    override fun onWifiNeedAuth(p0: String?) {
+                    }
 
-                override fun onDisconnected(p0: Int, p1: String?) {
-                }
-            })
-            .setGroupEventListener { }
+                    override fun onDisconnected(p0: Int, p1: String?) {
+                    }
+                })
+                .setGroupEventListener { }
         userConfig.refreshListener = object : TIMRefreshListener {
             override fun onRefreshConversation(msgs: MutableList<TIMConversation>) {
 
@@ -142,9 +142,9 @@ class MainActivity : AppCompatActivity() {
             Log.d(tag, "进度" + "===" + timMessage.status().status + "==" + +progress)
         }
         TIMManager.getInstance().userConfig = TIMUserConfigMsgExt(userConfig)
-            .setMessageRevokedListener {
-                im_ui.refresh()
-            }
+                .setMessageRevokedListener {
+                    im_ui.refresh()
+                }
         TIMManager.getInstance().addMessageListener(object : TIMMessageListener {
             override fun onNewMessages(msgs: MutableList<TIMMessage>): Boolean {
                 Log.d(tag, "新消息" + msgs.size)
@@ -177,8 +177,8 @@ class MainActivity : AppCompatActivity() {
 
     fun afterLogin() {
         val con = TIMManager.getInstance().getConversation(
-            TIMConversationType.C2C,    //会话类型：单聊
-            tel
+                TIMConversationType.C2C,    //会话类型：单聊
+                tel
         )
         val conversationExt = TIMConversationExt(con)
         val count = 10
@@ -257,8 +257,8 @@ class MainActivity : AppCompatActivity() {
                     if (preCustomElem.showType == PreCustomElem.ShowType.preSend){
                         im_ui.delete(RealMsg.decorate(timMessage))
 //                        preCustomElem.showType = PreCustomElem.ShowType.normal
-                        val newCustomElem = CustomElem(preCustomElem.type,preCustomElem.platform,preCustomElem.data)
-                        timMessage = IMHelp.getMsgBuildPolicy().buildCustomMessage(JsonUtil.toJson(newCustomElem)) as TIMMessage
+                        val newCustomElem = CustomElem(preCustomElem.type,preCustomElem.platform,preCustomElem.data,preCustomElem.type_desc)
+                        timMessage = IMHelp.getMsgBuildPolicy().buildCustomMessage(JsonUtil.toJson(newCustomElem),newCustomElem.type_desc) as TIMMessage
                     }
                 }
 
@@ -337,8 +337,8 @@ class MainActivity : AppCompatActivity() {
                     Log.d(tag, ele.toString())
                     Log.d(tag, JsonUtil.toJson(ele))
                     val msg =
-                        IMHelp.getMsgBuildPolicy()
-                            .buildCustomMessage(JsonUtil.toJson(ele))
+                            IMHelp.getMsgBuildPolicy()
+                                    .buildCustomMessage(JsonUtil.toJson(ele),ele.type_desc)
                     send(msg)
                     return
                 }
@@ -347,7 +347,7 @@ class MainActivity : AppCompatActivity() {
                     ele.showType = PreCustomElem.ShowType.preSend
                     Log.d(tag, ele.toString())
                     Log.d(tag, JsonUtil.toJson(ele))
-                    im_ui.newMsgs(RealMsg.create(IMHelp.getMsgBuildPolicy().buildCustomMessage(JsonUtil.toJson(ele)) as TIMMessage))
+                    im_ui.newMsgs(RealMsg.create(IMHelp.getMsgBuildPolicy().buildCustomMessage(JsonUtil.toJson(ele),ele.type_desc) as TIMMessage))
                     return
                 }
             }
@@ -419,7 +419,7 @@ class MainActivity : AppCompatActivity() {
             "}"
     var lastMsg: TIMMessage? = null
     val tag = "immmmmm"
-    val tel = "129a14e8a4b3a123"
+    val tel = "9bbea0317e336ea4"
     val indent = "8849cc559d324811"
     val sig = "eJxlj8FOg0AURfd8BWFbYx8Dr4BJFwQqYlubVrTuCJmZ1oFCYRixavx3I2rEeLfn5N7cN03XdSNZ3J5nlB6fKpWql5ob*oVugHH2C*tasDRTqSXZP8hPtZA8zXaKyx6aiEgAho5gvFJiJ74N17U9ShE9ZhHbNc2B2bIi7ee*qmwAAgj4RxH7Hi5n6yCOHqNmfGhCENvlZp6wURzchZe5HZ1urLJwMuq59QzC632Q*MIP*f3qtelUTmKFDwtn4rvVerVpRyWd5EUxp2x7kFdy3OHzdDqYVKLkP988Ao5n4YB2XLbiWPUCARNNYsFnDO1d*wDI4V5d"
 }
