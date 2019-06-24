@@ -22,7 +22,7 @@ import kotlin.math.absoluteValue
 class IMUI(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     lateinit var symbolTime: Date
     lateinit var senderUserNickName: String
-    lateinit var myNickName: String
+    var myNickName: String ?= null
 
     private val uiAdapter by lazy {
         object : RecyclerView.Adapter<ImHolder>() {
