@@ -3,7 +3,6 @@ package com.gengqiquan.imui.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -96,12 +95,18 @@ abstract class RealImView(val mContext: Context) : LinearLayout(mContext), ImVie
             IMHelp.getMsgSender(context)?.send(item.realData(), true)
         }
 
-        var name = item.sender().toString()
-        if (name.length > 2) {
+        tv_header?.singleClick {
+            IMHelp.getHeaderListener()?.click(item.identifier())
+        }
+
+        //var name = item.sender().toString()
+        var name = item.getNickName()
+        if( name.isNullOrEmpty() )name = item.identifier()
+        if ( name.length > 2 ) {
             name = name.substring(name.length - 2)
         }
         tv_header?.text = name
-        tv_time?.isShow(!item.time().isNullOrEmpty())
+        tv_time?.isShow(!item.time().isNullOrEmpty() && item.getTimeTag() == 1 )
         tv_time?.text = item.time() ?: ""
         decoratorItemView(item)
         floatBaseView().setOnLongClickListener {

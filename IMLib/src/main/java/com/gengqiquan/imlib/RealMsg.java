@@ -3,7 +3,7 @@ package com.gengqiquan.imlib;
 import android.annotation.SuppressLint;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-import androidx.annotation.MainThread;
+
 import com.gengqiquan.imlib.model.CustomElem;
 import com.gengqiquan.imlib.model.PreCustomElem;
 import com.gengqiquan.imui.help.IMHelp;
@@ -11,8 +11,24 @@ import com.gengqiquan.imui.interfaces.IPathListener;
 import com.gengqiquan.imui.interfaces.IimMsg;
 import com.gengqiquan.imui.model.ImImage;
 import com.gengqiquan.imui.model.ImVideo;
-import com.tencent.imsdk.*;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMCustomElem;
+import com.tencent.imsdk.TIMElem;
+import com.tencent.imsdk.TIMElemType;
+import com.tencent.imsdk.TIMImage;
+import com.tencent.imsdk.TIMImageElem;
+import com.tencent.imsdk.TIMImageType;
+import com.tencent.imsdk.TIMMessage;
+import com.tencent.imsdk.TIMMessageStatus;
+import com.tencent.imsdk.TIMSnapshot;
+import com.tencent.imsdk.TIMSoundElem;
+import com.tencent.imsdk.TIMTextElem;
+import com.tencent.imsdk.TIMUserProfile;
+import com.tencent.imsdk.TIMValueCallBack;
+import com.tencent.imsdk.TIMVideo;
+import com.tencent.imsdk.TIMVideoElem;
 import com.tencent.imsdk.ext.message.TIMMessageExt;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -21,11 +37,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.MainThread;
+
 public class RealMsg implements IimMsg {
     TIMMessage timMsg;
     Date time;
     TIMElem elem;
-
+    int timeTag = 0;//0-没有初始化,1-初始化,并且展示时间,2-初始化,不展示时间
+    String nickName;//姓名
+    boolean isRevoke = false;//是否是撤回消息
 
     private RealMsg(TIMMessage timMsg, TIMElem elem, Date time) {
         this.timMsg = timMsg;
@@ -34,6 +54,7 @@ public class RealMsg implements IimMsg {
     }
 
     public static List<RealMsg> create(TIMMessage timMsg) {
+
         List<RealMsg> list = new ArrayList<>();
         if (timMsg.status() == TIMMessageStatus.HasDeleted) {
             return list;
@@ -44,7 +65,8 @@ public class RealMsg implements IimMsg {
         for (int i = 0; i < timMsg.getElementCount(); i++) {
             TIMElem elem = timMsg.getElement(i);
             Date time = i == timMsg.getElementCount() - 1 ? new Date(timMsg.timestamp() * 1000) : null;
-            list.add(new RealMsg(timMsg, elem, time));
+            RealMsg realMsg = new RealMsg(timMsg, elem, time);
+            list.add(realMsg);
         }
         if (timMsg.getElementCount() > 1) {
             Log.e("getElementCount", timMsg.getElementCount() + "");
@@ -199,9 +221,10 @@ public class RealMsg implements IimMsg {
      */
     @Override
     public int uiType() {
-        if (timMsg.status() == TIMMessageStatus.HasRevoked) {
+        if (timMsg.status() == TIMMessageStatus.HasRevoked || isRevoke) {
             return -1;
         }
+
         if (elem.getType() == TIMElemType.Custom) {
             TIMCustomElem customElem = (TIMCustomElem) elem;
             PreCustomElem preCustomElem = PreCustomElem.create(new String(customElem.getData()));
@@ -257,13 +280,24 @@ public class RealMsg implements IimMsg {
 
             @Override
             public void onSuccess(TIMUserProfile timUserProfile) {
+                //此处返回的信息,可能是异步的,当前没有处理异步的,同步为空就取identify
+                if( timUserProfile != null ){
+                    timUserProfile.getNickName();
+                }
             }
         });
-        String nick = userProfile.getNickName();
-        if (nick == null || nick.isEmpty()){
-            return userProfile.getIdentifier();
+
+        if ( userProfile == null || userProfile.getNickName() == null || userProfile.getNickName().isEmpty() ){
+            return timMsg.getSender();
         }
-        return nick;
+
+        return userProfile.getNickName();
+    }
+
+    @NotNull
+    @Override
+    public String identifier() {
+        return timMsg.getSender();
     }
 
     CustomElem customData;
@@ -331,5 +365,47 @@ public class RealMsg implements IimMsg {
             status = 3;
         }
         return status;
+    }
+
+    @Override
+    public boolean setTimeTag(int tt) {
+        timeTag = tt;
+        return true;
+    }
+
+    @Override
+    public int getTimeTag() {
+        return timeTag;
+    }
+
+    @NotNull
+    @Override
+    public Date getTime() {
+        return time;
+    }
+
+    @Override
+    public boolean setNickName(@NotNull String nickName) {
+        this.nickName = nickName;
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public String getNickName() {
+        return nickName;
+    }
+
+    @NotNull
+    @Override
+    public boolean isRevoke() {
+        return isRevoke;
+    }
+
+    @NotNull
+    @Override
+    public boolean setRevoke(boolean revoke) {
+        isRevoke = revoke;
+        return true;
     }
 }

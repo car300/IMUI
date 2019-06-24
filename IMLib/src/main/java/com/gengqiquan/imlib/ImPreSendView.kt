@@ -13,11 +13,9 @@ import com.gengqiquan.imlib.model.CustomElem
 import com.gengqiquan.imlib.model.CustomType
 import com.gengqiquan.imlib.model.ShareElem
 import com.gengqiquan.imui.help.IMHelp
-import com.gengqiquan.imui.interfaces.ISenderListener
 import com.gengqiquan.imui.interfaces.IimMsg
 import com.gengqiquan.imui.ui.ImView
 import com.gengqiquan.imui.ui.singleClick
-import com.tencent.imsdk.ext.message.TIMMessageExt
 import org.jetbrains.anko.*
 
 class ImPreSendView(val context: Context) : ImView {
@@ -58,7 +56,7 @@ class ImPreSendView(val context: Context) : ImView {
                 }
                 tv_send = textView {
                     backgroundResource = R.drawable.im_send_back
-                    text = "发送TA"
+                    text = "发给TA"
                     textColor = Color.WHITE
                     textSize = 12f
                     gravity = Gravity.CENTER

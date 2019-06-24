@@ -2,6 +2,7 @@ package com.gengqiquan.imui.input
 
 import android.content.Context
 import android.graphics.Color
+import android.text.method.ScrollingMovementMethod
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -94,6 +95,8 @@ class ImInputUI(context: Context) : LinearLayout(context) {
                 gravity = Gravity.BOTTOM
             }
             et_text = editText {
+                movementMethod = ScrollingMovementMethod.getInstance()
+                maxHeight = dip(80)
                 background = resources.getDrawable(R.drawable.im_edit_back)
                 includeFontPadding = false
                 hint = "说点什么吧..."

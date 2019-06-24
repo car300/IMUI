@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.gengqiquan.imui.R
@@ -55,9 +54,10 @@ class ImRevokeView(val context: Context) : ImView {
     private var tv_content: TextView? = null
     private var tv_time: TextView? = null
     override fun decorator(item: IimMsg) {
-        tv_time?.isShow(!item.time().isNullOrEmpty())
+        tv_time?.isShow(!item.time().isNullOrEmpty() && item.getTimeTag() == 1 )
         tv_time?.text = item.time() ?: ""
-        val text = if (item.isSelf()) "您" else "\"${item.sender()}\""
+        val nickName = item.getNickName() ?: item.sender()
+        val text = if (item.isSelf()) "你" else "\"${nickName}\""
         tv_content?.text = text + "撤回了一条消息"
     }
 

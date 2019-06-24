@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 list.reverse()
                 im_ui.newMsgs(list)
-                return true
+                return false
             }
         })
         TIMManager.getInstance().login(indent, sig, object : TIMCallBack {

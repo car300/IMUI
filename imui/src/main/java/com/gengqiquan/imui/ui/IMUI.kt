@@ -16,8 +16,14 @@ import org.jetbrains.anko.dip
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.sdk27.coroutines.onFocusChange
+import java.util.*
+import kotlin.math.absoluteValue
 
 class IMUI(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+    lateinit var symbolTime: Date
+    lateinit var senderUserNickName: String
+    lateinit var myNickName: String
+
     private val uiAdapter by lazy {
         object : RecyclerView.Adapter<ImHolder>() {
             override fun getItemViewType(position: Int): Int {
@@ -37,11 +43,39 @@ class IMUI(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs
                 if (allInit == 1 && position == 0) {
                     return
                 }
+
+                var timMsg =  data[position - allInit]
+
+                if( timMsg.getTimeTag() == 0 ){//如果没有处理过tag才进行处理,如果处理过了,不做处理,以免列表反向滑动出错
+                    if( !::symbolTime.isInitialized ){
+                        symbolTime = data[position - allInit].getTime()
+                    }
+
+                    var cCalendar  = Calendar.getInstance()
+                    var sCalendar  = Calendar.getInstance()
+
+                    cCalendar.time = timMsg.getTime()
+                    sCalendar.time = symbolTime
+
+                    if(( cCalendar.timeInMillis - sCalendar.timeInMillis ).absoluteValue <= 5*60*1000 && position != 0 ) {//5分钟内隐藏
+                        data[position - allInit].setTimeTag(2)
+                    } else {//超过5分钟展示
+                        symbolTime = timMsg.getTime()
+                        data[position - allInit].setTimeTag(1)
+                    }
+
+                    if (timMsg.isSelf()) {//设置姓名
+                        timMsg.setNickName(myNickName ?: "我")
+                    } else {
+                        timMsg.setNickName(senderUserNickName ?: "")
+                    }
+
+                }
+
                 holder.imView.decorator(data[position - allInit])
             }
         }
     }
-
 
     private var data: MutableList<IimMsg> = arrayListOf()
     fun oldMsgs(oldData: List<IimMsg>, init: Boolean = false) {
@@ -75,6 +109,8 @@ class IMUI(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs
             }
 
         }
+
+        listUI.scrollToPosition(uiAdapter.itemCount-1)
 
     }
 
@@ -176,5 +212,10 @@ class IMUI(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs
         mIsLoadMore = false
         uiAdapter.notifyDataSetChanged()
     }
+
+    fun getData() : MutableList<IimMsg>{
+        return data;
+    }
+
 
 }

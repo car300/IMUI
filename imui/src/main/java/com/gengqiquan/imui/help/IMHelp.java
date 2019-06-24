@@ -91,6 +91,48 @@ public class IMHelp {
         return 10;
     }
 
+    /**
+     * identifier  发送者id
+     * nick_name 发送者昵称
+     * conversation_type 会话类型 C2C=1, GROUP=2, SYSTEM=3
+     */
+
+    private static String identifier;
+
+    private static String nick_name;
+
+    private static int conversation_type = 1;
+
+    public static String getIdentifier() {
+        return identifier;
+    }
+
+    public static String getNick_name() {
+        return nick_name;
+    }
+
+    public static int getConversation_type() {
+        return conversation_type;
+    }
+
+    public static void setIdentifier(String identifier) {
+        IMHelp.identifier = identifier;
+    }
+
+    public static void setNick_name(String nick_name) {
+        IMHelp.nick_name = nick_name;
+    }
+
+    private static IheaderListener headerListener;
+
+    public static IheaderListener getHeaderListener() {
+        return headerListener;
+    }
+
+    public static void setHeaderListener(IheaderListener headerListener) {
+        IMHelp.headerListener = headerListener;
+    }
+
     public static void init(Context context, IAudioRecorder recorder, IMsgBuildPolicy buildPolicy, ImImageDisplayer displayer) {
         if (pathProvider == null) {
             synchronized (IMHelp.class) {

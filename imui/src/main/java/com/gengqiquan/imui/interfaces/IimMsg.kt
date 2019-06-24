@@ -3,6 +3,7 @@ package com.gengqiquan.imui.interfaces
 import androidx.annotation.IntDef
 import com.gengqiquan.imui.model.ImImage
 import com.gengqiquan.imui.model.ImVideo
+import java.util.*
 
 open interface IimMsg {
     companion object {
@@ -29,5 +30,12 @@ open interface IimMsg {
     fun duration(): Long
     fun extra(): Any
     fun <T> realData(): T
-
+    fun setTimeTag(timeTag:Int) : Boolean
+    fun getTimeTag() : Int
+    fun getTime() : Date
+    fun identifier(): String
+    fun setNickName(nickName:String): Boolean
+    fun getNickName(): String
+    fun setRevoke(isRevoke:Boolean): Boolean
+    fun isRevoke(): Boolean
 }
