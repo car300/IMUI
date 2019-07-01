@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import androidx.annotation.MainThread;
 
@@ -177,9 +178,6 @@ public class RealMsg implements IimMsg {
     @MainThread
     public static String format(Date record) {
         Date now = new Date();
-//        if (now.getYear() != record.getYear()) {
-//            return formatYear.format(record) + tag + formatHours.format(record);
-//        }
         int days = now.getDay() - record.getDay();
 
         if (days == 0) {
@@ -188,19 +186,19 @@ public class RealMsg implements IimMsg {
         if (days == 1) {
             return "昨天 " + formatHours.format(record);
         }
-        if (days == 2) {
+        /*if (days == 2) {
             return "前天 " + formatHours.format(record);
-        }
+        }*/
         if (days <= 7) {
             Calendar c = Calendar.getInstance();
             c.setTime(record);
-            int weekday = c.get(Calendar.DAY_OF_WEEK);
+            int weekday = c.get(Calendar.DAY_OF_WEEK)-1;
             return "星期" + weekStr[weekday] + " " + formatHours.format(record);
         }
         return formatYear.format(record) + " " + formatHours.format(record);
     }
 
-    final static String[] weekStr = new String[]{"日", "一", "二", "三", "四", "五", "六",};
+    final static String[] weekStr = new String[]{"日", "一", "二", "三", "四", "五","六", };
 
     @NotNull
     @Override
@@ -221,6 +219,7 @@ public class RealMsg implements IimMsg {
      */
     @Override
     public int uiType() {
+//        Log.w("im_help",elem.getType().value() + "");
         if (timMsg.status() == TIMMessageStatus.HasRevoked || isRevoke) {
             return -1;
         }
@@ -234,6 +233,10 @@ public class RealMsg implements IimMsg {
                 case share:
                     type = 5;
                     break;
+                case revoke:
+                    type = -1;
+                    break;
+
             }
             if (preCustomElem.getShowType() == PreCustomElem.ShowType.preSend) {
                 type = 1000 + type;

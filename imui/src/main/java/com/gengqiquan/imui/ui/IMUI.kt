@@ -48,13 +48,18 @@ class IMUI(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs
 
                 if( timMsg.getTimeTag() == 0 ){//如果没有处理过tag才进行处理,如果处理过了,不做处理,以免列表反向滑动出错
                     if( !::symbolTime.isInitialized ){
-                        symbolTime = data[position - allInit].getTime()
+                        if (data.size<2){
+                            symbolTime = Date()
+                        }else{
+                            symbolTime = data[position -1 - allInit].getTime()
+                        }
                     }
 
                     var cCalendar  = Calendar.getInstance()
                     var sCalendar  = Calendar.getInstance()
 
                     cCalendar.time = timMsg.getTime()
+//                    cCalendar.time = Date()
                     sCalendar.time = symbolTime
 
                     if(( cCalendar.timeInMillis - sCalendar.timeInMillis ).absoluteValue <= 5*60*1000 && position != 0 ) {//5分钟内隐藏

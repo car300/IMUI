@@ -27,7 +27,7 @@ class ImShareView(context: Context) : RealImView(context) {
     var fl_content:RelativeLayout? = null
 
     override fun floatBaseView() = ll_content!!
-    override fun createItemView(contentView: RelativeLayout): View {
+    override fun createItemView(contentView: LinearLayout): View {
         fl_content = RelativeLayout(context).apply {
             layoutParams = RelativeLayout.LayoutParams(matchParent, wrapContent)
             ll_content = linearLayout().apply {
@@ -53,6 +53,7 @@ class ImShareView(context: Context) : RealImView(context) {
                         textSize = 12f
                         includeFontPadding = false
                         maxLines = 3
+                        ellipsize = TextUtils.TruncateAt.END
                         layoutParams = LinearLayout.LayoutParams(0, wrapContent).apply {
                             weight = 1f
                         }

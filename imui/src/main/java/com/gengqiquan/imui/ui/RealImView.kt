@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.IdRes
+import androidx.core.view.marginLeft
 import com.gengqiquan.imui.R
 import com.gengqiquan.imui.help.IMHelp
 import com.gengqiquan.imui.help.LongPressHelp
@@ -19,6 +20,7 @@ abstract class RealImView(val mContext: Context) : LinearLayout(mContext), ImVie
 
     private var tv_header: TextView? = null
     private var tv_time: TextView? = null
+    private var ll_content:LinearLayout ?= null
     override fun get(): View {
 
         return this
@@ -58,9 +60,9 @@ abstract class RealImView(val mContext: Context) : LinearLayout(mContext), ImVie
                     rightMargin = dip(15)
                 }
             }
-            relativeLayout {
+            ll_content = linearLayout {
                 horizontalPadding = dip(63)
-
+                orientation = HORIZONTAL
                 itemView = createItemView(this).apply {
                     id = localId
                 }
@@ -68,7 +70,6 @@ abstract class RealImView(val mContext: Context) : LinearLayout(mContext), ImVie
                 iv_fail = imageView {
                     padding=dip(8)
                     imageResource = R.drawable.im_fail
-
                 }
             }
         }
@@ -76,20 +77,35 @@ abstract class RealImView(val mContext: Context) : LinearLayout(mContext), ImVie
 
     private var iv_fail: ImageView? = null
     private var itemView: View? = null
-    abstract fun createItemView(contentView: RelativeLayout): View
+    abstract fun createItemView(contentView: LinearLayout): View
 
     override fun decorator(item: IimMsg) {
         tv_header?.layoutParams = (tv_header?.layoutParams as FrameLayout.LayoutParams).apply {
             gravity = if (item.isSelf()) Gravity.RIGHT else Gravity.LEFT
         }
-        itemView?.layoutParams = RelativeLayout.LayoutParams(wrapContent, wrapContent).apply {
+        itemView?.layoutParams = LinearLayout.LayoutParams(wrapContent, wrapContent)/*.apply {
             if (item.isSelf()) alignParentRight() else alignParentLeft()
+        }*/
+        iv_fail?.layoutParams = LinearLayout.LayoutParams(dip(36), dip(36)).apply {
+//            centerVertically()
+//            if (item.isSelf()) leftOf(itemView!!) else rightOf(itemView!!)
         }
-        iv_fail?.layoutParams = RelativeLayout.LayoutParams(dip(36), dip(36)).apply {
-            centerVertically()
-            if (item.isSelf()) leftOf(itemView!!) else rightOf(itemView!!)
+        ll_content?.removeAllViews()
+        if (!item.isSelf()){
+            ll_content?.gravity = Gravity.START or Gravity.CENTER_VERTICAL
+            ll_content?.addView(itemView)
+            ll_content?.addView(iv_fail)
+        }else{
+            ll_content?.gravity = Gravity.END or Gravity.CENTER_VERTICAL
+            ll_content?.addView(iv_fail)
+            ll_content?.addView(itemView)
         }
-        iv_fail?.isShow(item.status() == 3)
+        if (item.status() == 3){
+            iv_fail?.show()
+        }else{
+            iv_fail?.hide()
+        }
+//        iv_fail?.isShow(item.status() == 3)
 
         iv_fail?.singleClick {
             IMHelp.getMsgSender(context)?.send(item.realData(), true)
@@ -99,7 +115,7 @@ abstract class RealImView(val mContext: Context) : LinearLayout(mContext), ImVie
             IMHelp.getHeaderListener()?.click(item.identifier())
         }
 
-        //var name = item.sender().toString()
+//        var name = item.sender().toString()
         var name = item.getNickName()
         if( name.isNullOrEmpty() )name = item.identifier()
         if ( name.length > 2 ) {

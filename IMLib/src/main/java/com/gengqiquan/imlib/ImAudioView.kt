@@ -23,7 +23,7 @@ class ImAudioView(context: Context) : RealImView(context) {
     var iv_play: ImageView? = null
 
     override fun floatBaseView() = fl_voice!!
-    override fun createItemView(contentView: RelativeLayout): View {
+    override fun createItemView(contentView: LinearLayout): View {
         fl_voice = FrameLayout(context).apply {
             iv_play = imageView {
                 layoutParams = FrameLayout.LayoutParams(dip(20), dip(20)).apply {
@@ -60,8 +60,8 @@ class ImAudioView(context: Context) : RealImView(context) {
         m = dip(50)
         var duration = if (item.duration() > 60) 60 else item.duration()
         var length = dip(65) + getLength(0, duration)
-        fl_voice?.layoutParams = RelativeLayout.LayoutParams(length, wrapContent).apply {
-            if (item.isSelf()) alignParentRight() else alignParentLeft()
+        fl_voice?.layoutParams = LinearLayout.LayoutParams(length, wrapContent).apply {
+//            if (item.isSelf()) alignParentRight() else alignParentLeft()
         }
         tv_time?.layoutParams = (tv_time?.layoutParams as FrameLayout.LayoutParams).apply {
             gravity = (if (item.isSelf()) Gravity.RIGHT else Gravity.LEFT) xor Gravity.CENTER_VERTICAL
@@ -107,5 +107,10 @@ class ImAudioView(context: Context) : RealImView(context) {
 
     }
 
-
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if (UIKitAudioArmMachine.getInstance().isPlayingRecord) {
+            UIKitAudioArmMachine.getInstance().stopPlayRecord()
+        }
+    }
 }

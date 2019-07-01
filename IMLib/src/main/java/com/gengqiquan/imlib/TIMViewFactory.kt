@@ -23,6 +23,9 @@ class TIMViewFactory : IimViewFactory {
             }
         }
         return when (viewType) {
+            DefaultIMViewFactory.REVOKE -> {
+                ImRevokeView(context)
+            }
             DefaultIMViewFactory.AUDIO -> {
                 ImAudioView(context)
             }

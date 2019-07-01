@@ -13,7 +13,9 @@ import org.jetbrains.anko.*
 class ImUnKnowView(val context: Context) : ImView {
     override fun get(): View {
         return FrameLayout(context).apply {
-            layoutParams = FrameLayout.LayoutParams(matchParent, wrapContent)
+            layoutParams = FrameLayout.LayoutParams(matchParent, wrapContent).apply {
+                topPadding = dip(15)
+            }
             textView {
                 textColor = Color.BLACK
                 textSize = 14f

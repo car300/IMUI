@@ -447,6 +447,9 @@ public class ImCameraView extends FrameLayout implements CameraInterface.CameraO
     public void playVideo(Bitmap firstFrame, final String url) {
         videoUrl = url;
         ImCameraView.this.firstFrame = firstFrame;
+        if(!mVideoView.getHolder().getSurface().isValid()) {
+            return;
+        }
         new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override

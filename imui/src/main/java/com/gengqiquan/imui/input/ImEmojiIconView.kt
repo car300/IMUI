@@ -15,6 +15,7 @@ import org.jetbrains.anko.bottomPadding
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.padding
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 
 class ImEmojiIconView(context: Context) : LinearLayout(context) {
@@ -38,7 +39,7 @@ class ImEmojiIconView(context: Context) : LinearLayout(context) {
             override fun onBindViewHolder(holder: Holder, position: Int) {
                 val iv_emoji = holder.itemView as ImageView
                 iv_emoji.setImageBitmap(data[position].icon)
-                iv_emoji.singleClick {
+                iv_emoji.onClick {
                     selectedListener?.select(data[position].filter)
                 }
             }

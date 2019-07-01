@@ -22,9 +22,6 @@ class DefaultIMViewFactory : IimViewFactory {
     override fun create(parent: ViewGroup, viewType: Int): ImView? {
         val context = parent.context
         return when (viewType) {
-            REVOKE -> {
-                ImRevokeView(context)
-            }
             TEXT -> {
                 ImTextView(context)
             }

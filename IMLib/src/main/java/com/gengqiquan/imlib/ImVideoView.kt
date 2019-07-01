@@ -34,7 +34,7 @@ class ImVideoView(context: Context) : RealImView(context) {
     @IdRes
     val localId = 0xff9900
 
-    override fun createItemView(contentView: RelativeLayout): View {
+    override fun createItemView(contentView: LinearLayout): View {
         rl_item = RelativeLayout(context).apply {
             fl_content = frameLayout {
                 id = localId
@@ -173,8 +173,8 @@ class ImVideoView(context: Context) : RealImView(context) {
         if (pb_loading!!.visibility == View.VISIBLE) {
             w = newWidth + dip(30)
         }
-        rl_item?.layoutParams = RelativeLayout.LayoutParams(w, newHeight).apply {
-            if (isSelf) alignParentRight() else alignParentLeft()
+        rl_item?.layoutParams = LinearLayout.LayoutParams(w, newHeight).apply {
+//            if (isSelf) alignParentRight() else alignParentLeft()
         }
         val min = Math.min(newWidth, newHeight) / 2
         iv_paly?.layoutParams = FrameLayout.LayoutParams(min, min).apply {

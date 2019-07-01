@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.gengqiquan.imui.R
@@ -27,7 +28,7 @@ class ImTextView(context: Context) : RealImView(context) {
         return list
     }
 
-    override fun createItemView(contentView: RelativeLayout): View {
+    override fun createItemView(contentView: LinearLayout): View {
         tv_content = TextView(context).apply {
             textColor = Color.BLACK
             textSize = 18f
@@ -39,9 +40,9 @@ class ImTextView(context: Context) : RealImView(context) {
 
     override fun decoratorItemView(item: IimMsg) {
         tv_content?.text = EmojiManager.compatEmojiText(item.text())
-        tv_content?.layoutParams = RelativeLayout.LayoutParams(wrapContent, wrapContent).apply {
+        tv_content?.layoutParams = LinearLayout.LayoutParams(wrapContent, wrapContent)/*.apply {
             if (item.isSelf()) alignParentRight() else alignParentLeft()
-        }
+        }*/
         tv_content?.setBackgroundResource(if (item.isSelf()) R.drawable.im_text_self else R.drawable.im_text)
     }
 

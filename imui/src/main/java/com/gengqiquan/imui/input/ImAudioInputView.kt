@@ -3,6 +3,7 @@ package com.gengqiquan.imui.input
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -20,6 +21,7 @@ class ImAudioInputView(context: Context) : TextView(context) {
     private var startRecordY: Float = 0.toFloat()
 //    var inputHandler: InputHandler? = null
 
+    private var firstTime = 0L
     init {
 
         background = resources.getDrawable(R.drawable.im_edit_back)
@@ -36,24 +38,32 @@ class ImAudioInputView(context: Context) : TextView(context) {
                     audioCancel = true
                     startRecordY = motionEvent.getY()
 
-                    startRecord()
-                    start = System.currentTimeMillis()
-                    IMHelp.getAudioRecorder().startRecord {
-                        if (it < 1000 && !audioCancel) {
-                            tooShort()
-                            return@startRecord
-                        }
+                    if (firstTime == 0L){
+                        firstTime = motionEvent.downTime
+                    }
+                    var secondTime = motionEvent.downTime
+                    Log.w("录音", "$firstTime:$secondTime")
+                    if (secondTime - firstTime > 500){
+                        startRecord()
+                        start = System.currentTimeMillis()
+                        IMHelp.getAudioRecorder().startRecord {
+                            if (it < 1000 && !audioCancel) {
+                                tooShort()
+                                return@startRecord
+                            }
 
-                        if (!audioCancel) {
-                            stopRecord()
-                            IMHelp.getMsgSender(context)?.send(
-                                IMHelp.getMsgBuildPolicy().buildAudioMessage(
-                                    IMHelp.getAudioRecorder().recordAudioPath,
-                                    it.toInt()
+                            if (!audioCancel) {
+                                stopRecord()
+                                IMHelp.getMsgSender(context)?.send(
+                                        IMHelp.getMsgBuildPolicy().buildAudioMessage(
+                                                IMHelp.getAudioRecorder().recordAudioPath,
+                                                it.toInt()
+                                        )
                                 )
-                            )
+                            }
                         }
                     }
+                    firstTime = secondTime
                     return true
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {

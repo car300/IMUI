@@ -1,6 +1,9 @@
 package com.gengqiquan.imlib.model;
 
 public enum CustomType {
+
+    revoke("revoke"),
+
     share("share"),
 
     invalid("invalid");

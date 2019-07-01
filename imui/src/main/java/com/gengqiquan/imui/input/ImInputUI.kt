@@ -178,6 +178,7 @@ class ImInputUI(context: Context) : LinearLayout(context) {
                         IMHelp.getMsgBuildPolicy().buildTextMessage(et_text!!.text.toString())
                     )
                     et_text?.setText("")
+                    et_text?.setSelection(0)
                 }
             }.lparams(dip(44), dip(26)) {
                 horizontalMargin = dip(6)

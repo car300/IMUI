@@ -18,7 +18,7 @@ class ImImageView(mContext: Context) : RealImView(mContext) {
     var iv_img: ImageView? = null
     override fun floatBaseView() = iv_img!!
 
-    override fun createItemView(contentView: RelativeLayout): View {
+    override fun createItemView(contentView: LinearLayout): View {
         iv_img = ImageView(context).apply {
             scaleType = ImageView.ScaleType.CENTER_INSIDE
         }
@@ -55,8 +55,8 @@ class ImImageView(mContext: Context) : RealImView(mContext) {
             newHeight = max
             iv_img?.scaleType = ImageView.ScaleType.CENTER_CROP
         }
-        iv_img?.layoutParams = RelativeLayout.LayoutParams(newWidth, newHeight).apply {
-            if (item.isSelf()) alignParentRight() else alignParentLeft()
+        iv_img?.layoutParams = LinearLayout.LayoutParams(newWidth, newHeight).apply {
+//            if (item.isSelf()) alignParentRight() else alignParentLeft()
         }
 
         IMHelp.getImageDisplayer().display(img.thumb, iv_img!!, object : DisplayListener {
